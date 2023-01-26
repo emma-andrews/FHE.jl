@@ -1,0 +1,10 @@
+name = "FHE"
+uuid = "6e27d44f-6cf2-45c8-a67f-e07d2a50c098"
+authors = ["Emma Andrews <eandrews258@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+AbstractAlgebra = "c3fe647b-3220-5bb0-a1ea-a7954cac585d"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
