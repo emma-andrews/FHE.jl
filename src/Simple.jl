@@ -7,25 +7,34 @@ export Simple, key_gen, encrypt, decrypt, add, mult
 struct Simple <: HE
     ring
     generator
-    field_mod::Int64
+    pt_ring
+    pt_generator
+    ct_mod::Int64
     pt_mod::Int64
-    const_poly
+    poly_mod
+    pt_poly_mod
 end
 
-function Simple(field_mod::Int64, coeffs::Vector{Int64}, pt_mod::Int64)
-    R = ResidueRing(ZZ, field_mod)
+function Simple(ct_mod::Int64, coeffs::Vector{Int64}, pt_mod::Int64)
+    R = ResidueRing(ZZ, ct_mod)
     S, x = PolynomialRing(R, "x")
+    V = ResidueRing(ZZ, pt_mod)
+    Q, y = PolynomialRing(V, "y")
+
     poly_mod = 0
+    pt_poly_mod = 0
 
     for (index, value) in enumerate(coeffs)
         if value == 0
             continue
         end
         poly_mod += value * x^(index - 1)
+        pt_poly_mod += value * y^(index - 1)
     end
 
     U = ResidueRing(S, poly_mod)
-    return Simple(U, x, field_mod, pt_mod, 5)
+
+    return Simple(U, x, Q, y, ct_mod, pt_mod, poly_mod, pt_poly_mod)
 end
 
 """
@@ -43,9 +52,9 @@ function key_gen(S::Simple, size::Int64)
     for i in 1:size
         # Generate secret key polynomial in R_2
         sk += rand((0, 1)) * x ^ (i - 1)
-        # Generate a in R_fieldmod
-        a += rand(0:S.field_mod) * x ^ (i - 1)
-        # Generate error in R_fieldmod
+        # Generate a in R_ctmod
+        a += rand(0:S.ct_mod) * x ^ (i - 1)
+        # Generate error in R_ctmod
         e += rand((0, 1)) * x ^ (i - 1)
     end
 
@@ -58,9 +67,9 @@ function key_gen(S::Simple, size::Int64)
 end
 
 """
-    encrypt(S::Simple)
+    encrypt(S::Simple, pt::Int64)
 """
-function encrypt(S::Simple)
+function encrypt(S::Simple, pt::Int64)
 
 end
 
