@@ -13,4 +13,8 @@ using FHE
     # so check that the return values were populated with something
     (b, a), sk = key_gen(S, 5)
     @test typeof(b) != Nothing && typeof(a) != Nothing && typeof(sk) != Nothing
+
+    (ct0, ct1) = encrypt(S, 5, (b, a))
+    println(ct0)
+    @test typeof(ct0) != Nothing && typeof(ct1) != Nothing
 end

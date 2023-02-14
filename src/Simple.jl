@@ -28,8 +28,8 @@ function Simple(ct_mod::Int64, coeffs::Vector{Int64}, pt_mod::Int64)
         if value == 0
             continue
         end
-        poly_mod += value * x^(index - 1)
-        pt_poly_mod += value * y^(index - 1)
+        poly_mod += value * x ^ (index - 1)
+        pt_poly_mod += value * y ^ (index - 1)
     end
 
     U = ResidueRing(S, poly_mod)
@@ -67,17 +67,24 @@ function key_gen(S::Simple, size::Int64)
 end
 
 """
-    encrypt(S::Simple, pt::Int64)
+    encrypt(S::Simple, pt::Int64, pk::Tuple{Int64, Int64})
 """
-function encrypt(S::Simple, pt::Int64)
-
+function encrypt(S::Simple, pt::Int64, pk)
+    u = rand((0, 1))
+    e1 = rand((0, 1))
+    e2 = rand((0, 1))
+    d = div(S.ct_mod, S.pt_mod)
+    m = mod(pt, S.pt_mod)
+    ct0 = S.ring(pk[1] * u + e1 + d * m)
+    ct1 = S.ring(pk[2] * u + e2)
+    return (ct0, ct1)
 end
 
 """
     decrypt(S::Simple)
 """
-function decrypt(S::Simple)
-
+function decrypt(S::Simple, ct, sk)
+    d1 = S.ring(ct[1] + c[2] * sk)
 end
 
 """
